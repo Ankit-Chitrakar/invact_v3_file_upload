@@ -1,13 +1,17 @@
-const cloudinary = require('cloudinary').v2;
+const {v2} = require('cloudinary');
 require('dotenv').config();
 const crypto = require('crypto');
 
+const cloudinary = v2;
 // Configure Cloudinary
-cloudinary.config({
-    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-    api_key: process.env.CLOUDINARY_API_KEY,
-    api_secret: process.env.CLOUDINARY_API_SECRET,
-});
+const cloudinaryConfig = ()=>{
+    cloudinary.config({
+        cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+        api_key: process.env.CLOUDINARY_API_KEY,
+        api_secret: process.env.CLOUDINARY_API_SECRET,
+    });
+}
+
 
 // Generate Signature for Upload
 const generateSignature = (paramsToSign) => {
@@ -24,6 +28,7 @@ const generateSignature = (paramsToSign) => {
 // Upload File to Cloudinary
 const uploadToCloudinary = async (filePath) => {
     try {
+        cloudinaryConfig();
         const timestamp = Math.round(new Date().getTime() / 1000);
         const paramsToSign = { timestamp };
 
